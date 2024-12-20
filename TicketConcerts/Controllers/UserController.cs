@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using TicketConcerts.Data;
@@ -37,6 +37,21 @@ namespace TicketConcerts.Controllers
 
             return Ok(userById);
         }
+        [HttpGet]
+        [Route("{email}/{password}")]
+        public IActionResult GetUserbyEmail(string email, string password)
+        {
+            var userByEmailAndPassword = dbContext.Users
+                .FirstOrDefault(u => u.Email == email && u.Password == password);
+
+            if (userByEmailAndPassword == null)
+            {
+                return NotFound("No se encontró el usuario");
+            }
+
+            return Ok(userByEmailAndPassword);
+        }
+
         [HttpPost]
         public IActionResult AddUser(AddUserDto addUserDto)
         {
